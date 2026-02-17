@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CCPRGG2L – Intermediate Programming Reviewer</title>
+  <style>
+    :root {
+      --blue: #1e3a5f;
+      --blue-light: #2e5fa3;
+      --accent: #f4a261;
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+      --code-bg: #1e2a3a;
+      --code-text: #e2f0ff;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #eab308;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+      color: white;
+      padding: 2.5rem 2rem 2rem;
+      text-align: center;
+    }
+    header h1 { font-size: 1.9rem; margin-bottom: 0.4rem; }
+    header p { color: #b8d4ff; font-size: 1rem; }
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* TOC */
+    .toc {
+      background: white;
+      border-left: 4px solid var(--blue-light);
+      margin: 1.5rem auto;
+      max-width: 860px;
+      border-radius: 0 8px 8px 0;
+      padding: 1.2rem 1.5rem;
+    }
+    .toc h2 { color: var(--blue); font-size: 1rem; margin-bottom: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .toc ol { padding-left: 1.2rem; }
+    .toc li { margin: 0.3rem 0; }
+    .toc a { color: var(--blue-light); text-decoration: none; font-weight: 500; }
+    .toc a:hover { text-decoration: underline; }
+
+    main { max-width: 860px; margin: 0 auto; padding: 1rem 1.2rem 3rem; }
+
+    /* Module Section */
+    .module {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      margin-bottom: 2.2rem;
+      overflow: hidden;
+    }
+    .module-header {
+      background: linear-gradient(90deg, var(--blue) 0%, var(--blue-light) 100%);
+      color: white;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .module-num {
+      background: var(--accent);
+      color: white;
+      font-weight: 800;
+      font-size: 1.1rem;
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .module-header h2 { font-size: 1.15rem; }
+    .module-body { padding: 1.4rem 1.5rem; }
+
+    /* Subtopic */
+    .subtopic { margin-bottom: 1.5rem; }
+    .subtopic h3 {
+      color: var(--blue);
+      font-size: 1rem;
+      font-weight: 700;
+      border-bottom: 2px solid #e0eaff;
+      padding-bottom: 0.3rem;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .subtopic p { margin-bottom: 0.6rem; font-size: 0.96rem; }
+
+    /* Key term */
+    .key { font-weight: 700; color: var(--blue-light); }
+
+    /* Lists */
+    ul.notes, ol.notes {
+      padding-left: 1.4rem;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+    ul.notes li, ol.notes li { margin-bottom: 0.35rem; }
+
+    /* Code block */
+    .code-block {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      margin: 0.6rem 0 0.9rem;
+      line-height: 1.6;
+    }
+    .code-block .kw { color: #89c4f4; }
+    .code-block .cm { color: #6b8c9e; font-style: italic; }
+    .code-block .str { color: #a8d8a8; }
+    .code-block .num { color: #f4a261; }
+
+    /* Info box */
+    .info-box {
+      border-radius: 8px;
+      padding: 0.85rem 1.1rem;
+      margin: 0.6rem 0;
+      font-size: 0.93rem;
+    }
+    .info-box.blue { background: #e8f0ff; border-left: 4px solid var(--blue-light); }
+    .info-box.yellow { background: #fefce8; border-left: 4px solid var(--yellow); }
+    .info-box.green { background: #f0fdf4; border-left: 4px solid var(--green); }
+    .info-box.red { background: #fff1f2; border-left: 4px solid var(--red); }
+    .info-box strong { display: block; margin-bottom: 0.3rem; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--blue); }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin: 0.7rem 0;
+    }
+    th {
+      background: var(--blue);
+      color: white;
+      padding: 0.55rem 0.9rem;
+      text-align: left;
+    }
+    td {
+      padding: 0.5rem 0.9rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    tr:nth-child(even) td { background: #f8faff; }
+
+    /* Milestone timeline */
+    .timeline { position: relative; padding-left: 1.5rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0.35rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #c7d7f5;
+    }
+    .timeline-item { position: relative; margin-bottom: 0.8rem; }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -1.15rem;
+      top: 0.45rem;
+      width: 0.7rem;
+      height: 0.7rem;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+    .timeline-item .year { font-weight: 700; color: var(--blue-light); font-size: 0.9rem; }
+    .timeline-item p { font-size: 0.92rem; }
+
+    /* Quick facts */
+    .quick-facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.8rem;
+      margin: 0.7rem 0;
+    }
+    .fact-card {
+      background: #eef2ff;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      text-align: center;
+    }
+    .fact-card .fact-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .fact-card .fact-value { font-size: 1.05rem; font-weight: 700; color: var(--blue); }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+      padding: 2rem 1rem;
+      border-top: 1px solid #e5e7eb;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Study Reviewer</div>
+  <h1>CCPRGG2L – Intermediate Programming</h1>
+  <p>Complete coverage of all 6 modules · Based on course manual content only</p>
+</header>
+
+<div class="toc">
+  <h2>📋 Table of Contents</h2>
+  <ol>
+    <li><a href="#mod1">Module 1 – Introduction to Java</a></li>
+    <li><a href="#mod2">Module 2 – Variables, Data Types & Basic I/O</a></li>
+    <li><a href="#mod3">Module 3 – Control Flow Statements</a></li>
+    <li><a href="#mod4">Module 4 – Arrays</a></li>
+    <li><a href="#mod5">Module 5 – Classes, Methods & Exception Handling</a></li>
+    <li><a href="#mod6">Module 6 – File Handling & I/O Operations</a></li>
+  </ol>
+</div>
+
+<main>
+
+  <!-- ===== MODULE 1 ===== -->
+  <section class="module" id="mod1">
+    <div class="module-header">
+      <div class="module-num">1</div>
+      <h2>Introduction to Java · Setting Up the Environment · Java Syntax</h2>
+    </div>
+    <div class="module-body">
+
+      <div class="subtopic">
+        <h3>What is Java?</h3>
+        <p>Java is a <span class="key">high-level, class-based, object-oriented programming language</span> designed to have as few implementation dependencies as possible.</p>
+        <ul class="notes">
+          <li>Follows the principle of <span class="key">"Write Once, Run Anywhere" (WORA)</span> — compiled Java code runs on any platform that supports Java without recompilation.</li>
+          <li>Developed in <span class="key">1991</span> by <span class="key">James Gosling, Mike Sheridan, and Patrick Naughton</span> at Sun Microsystems.</li>
+          <li>Originally called <span class="key">"Oak"</span> (after a tree outside Gosling's office); later renamed <span class="key">"Java"</span> after Indonesian coffee.</li>
+          <li>Sun Microsystems was later acquired by <span class="key">Oracle Corporation</span>.</li>
+        </ul>
+      </div>
+
+      <div class="subtopic">
+        <h3>Key Milestones of Java</h3>
+        <div class="timeline">
+          <div class="timeline-item"><span class="year">1991</span><p>Project initiated by James Gosling and the Green Team. Originally designed for interactive television.</p></div>
+          <div class="timeline-item"><span class="year">1995</span><p>Java officially launched as Java 1.0 with the WORA slogan.</p></div>
+          <div class="timeline-item"><span class="year">1997</span><p>JDK 1.1 released — added JDBC API, JavaBeans, and inner classes.</p></div>
+          <div class="timeline-item"><span class="year">1999</span><p>Java 2 (J2SE 1.2) released — introduced J2SE, J2EE, J2ME editions; Swing GUI and Collections framework.</p></div>
+          <div class="timeline-item"><span class="year">2004</span><p>Java 5.0 — generics, metadata, enums, enhanced for-loop.</p></div>
+          <div class="timeline-item"><span class="year">2006</span><p>Java released under GNU GPL → OpenJDK born.</p></div>
+          <div class="timeline-item"><span class="year">2009</span><p>Oracle Corporation acquired Sun Microsystems (and Java).</p></div>
+          <div class="timeline-item"><span class="year">2014</span><p>Java 8 — lambda expressions, Stream API, new date/time API.</p></div>
+          <div class="timeline-item"><span class="year">2017</span><p>Oracle announced a new 6-month release cadence.</p></div>
+          <div class="timeline-item"><span class="year">Present</span><p>Java continues to evolve; widely used in web, mobile, and enterprise systems.</p></div>
+        </div>
+      </div>
+
+      <div class="subtopic">
+        <h3>Real-World Applications of Java</h3>
+        <ul class="notes">
+          <li><span class="key">Web Applications</span> — server-side apps using Spring, Hibernate, Struts.</li>
+          <li><span class="key">Enterprise Applications</span> — large-scale systems using Java EE / Jakarta EE.</li>
+          <li><span class="key">Mobile Applications</span> — most Android apps are written in Java.</li>
+          <li><span class="key">Big Data</span> — Apache Hadoop, Apache Spark.</li>
+          <li><span class="key">Scientific Applications</span> — data processing, simulations.</li>
+          <li><span class="key">Gaming</span> — 2D/3D and mobile games.</li>
+          <li><span class="key">Cloud Computing</span> — AWS, Google Cloud, Azure.</li>
+        </ul>
+      </div>
+
+      <div class="subtopic">
+        <h3>Setting Up the Java Development Environment</h3>
+        <p><span class="key">JDK (Java Development Kit)</span> — required to compile and run Java programs.</p>
+        <ul class="notes">
+          <li>Download from Oracle's official site or OpenJDK.</li>
+          <li>After installing, set the <span class="key">PATH environment variable</span> to the JDK's <code>bin</code> directory (e.g., <code>C:\Program Files\Java\jdk-&lt;version&gt;\bin</code>).</li>
+          <li>Verify with the command: <code>javac -version</code></li>
+        </ul>
+        <p><span class="key">Popular IDEs:</span></p>
+        <ul class="notes">
+          <li><span class="key">Eclipse</span> — widely used, open-source.</li>
+          <li><span class="key">IntelliJ IDEA</span> — known for advanced code editing and refactoring.</li>
+          <li><span class="key">NetBeans</span> — easy to use, built-in support for Java SE/EE.</li>
+        </ul>
+      </div>
+
+      <div class="subtopic">
+        <h3>Basic Java Syntax and Structure</h3>
+        <p>Every Java application requires a <span class="key">main() method</span> as its entry point:</p>
+        <div class="code-block">
+<span class="kw">public</span> <span class="kw">class</span> HelloWorld {
+  <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(String[] args) {
+    System.out.println(<span class="str">"Hello, World!"</span>);
+  }
+}
+        </div>
+        <table>
+          <tr><th>Keyword</th><th>Meaning</th></tr>
+          <tr><td><code>public</code></td><td>Accessible from outside the class</td></tr>
+          <tr><td><code>static</code></td><td>Runs without creating a class instance</td></tr>
+          <tr><td><code>void</code></td><td>Method does not return a value</td></tr>
+          <tr><td><code>String[] args</code></td><td>Command-line arguments passed to the program</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== MODULE 2 ===== -->
+  <section class="module" id="mod2">
+    <div class="module-header">
+      <div class="module-num">2</div>
+      <h2>Variables, Data Types, Operators & Basic I/O</h2>
+    </div>
+    <div class="module-body">
+
+      <div class="subtopic">
+        <h3>Variables</h3>
+        <p>Variables are <span class="key">containers to store data</span> that can be referenced and manipulated. Each variable must have a specific type.</p>
+        <div class="code-block">
+<span class="kw">int</span> age = <span class="num">20</span>;           <span class="cm">// declaration + initialization</span>
+<span class="kw">double</span> height = <span class="num">5.9</span>;
+<span class="kw">char</span> grade = <span class="str">'A'</span>;
+<span class="kw">boolean</span> isStudent = <span class="kw">true</span>;
+String name = <span class="str">"Alice"</span>;
+        </div>
+      </div>
+
+      <div class="subtopic">
+        <h3>Primitive Data Types</h3>
+        <table>
+          <tr><th>Type</th><th>Size</th><th>Range / Notes</th></tr>
+          <tr><td><code>byte</code></td><td>1 byte</td><td>-128 to 127</td></tr>
+          <tr><td><code>short</code></td><td>2 bytes</td><td>-32,768 to 32,767</td></tr>
+          <tr><td><code>int</code></td><td>4 bytes</td><td>-2³¹ to 2³¹-1 (most common integer type)</td></tr>
+          <tr><td><code>long</code></td><td>8 bytes</td><td>Large integers — use L suffix (e.g., <code>123456789L</code>)</td></tr>
+          <tr><td><code>float</code></td><td>4 bytes</td><td>Single-precision decimal — use F suffix (e.g., <code>3.14F</code>)</td></tr>
+          <tr><td><code>double</code></td><td>8 bytes</td><td>Double-precision decimal — default for decimals</td></tr>
+          <tr><td><code>char</code></td><td>2 bytes</td><td>Single Unicode character</td></tr>
+          <tr><td><code>boolean</code></td><td>1 bit</td><td>true or false</td></tr>
+        </table>
+        <div class="info-box blue">
+          <strong>Reference Data Types</strong>
+          Include classes, interfaces, and arrays (e.g., <code>String</code>, <code>int[]</code>). They store <em>references</em> to objects, not the object itself.
+        </div>
+      </div>
+
+      <div class="subtopic">
+        <h3>Variable Scope & Lifetime</h3>
+        <ul class="notes">
+          <li><span class="key">Local Variables</span> — declared inside a method; accessible only within that method. Deleted after method execution.</li>
+          <li><span class="key">Instance Variables (Fields)</span> — declared inside a class, outside methods. Belong to a specific object instance.</li>
+          <li><span class="key">Class Variables (Static Fields)</span> — declared with the <code>static</code> keyword; shared across all instances of the class.</li>
+        </ul>
+      </div>
+
+      <div class="subtopic">
+        <h3>Java Operators</h3>
+        <table>
+          <tr><th>Category</th><th>Operators</th><th>Notes</th></tr>
+          <tr><td>Arithmetic</td><td><code>+ - * / %</code></td><td>% is modulus (remainder)</td></tr>
+          <tr><td>Assignment</td><td><code>= += -= *= /=</code></td><td>Compound operators combine operation with assignment</td></tr>
+          <tr><td>Comparison</td><td><code>== != &gt; &lt; &gt;= &lt;=</code></td><td>Returns boolean (true/false)</td></tr>
+          <tr><td>Logical</td><td><code>&amp;&amp; || !</code></td><td>AND, OR, NOT</td></tr>
+          <tr><td>Increment/Decrement</td><td><code>++ --</code></td><td>Prefix (++x) increments before use; Postfix (x++) increments after use</td></tr>
+        </table>
+        <div class="info-box yellow">
+          <strong>Prefix vs Postfix</strong>
+          <code>++x</code> — the value is incremented <em>before</em> being used in an expression.<br>
+          <code>x++</code> — the value is used in the expression <em>first</em>, then incremented.
+        </div>
+      </div>
+
+      <div class="subtopic">
+        <h3>Basic Input & Output Operations</h3>
+        <p><span class="key">Output</span> — use <code>System.out.println()</code> (prints with newline) or <code>System.out.print()</code> (prints without newline).</p>
+        <p><span class="key">Input</span> — use the <code>Scanner</code> class from the <code>java.util</code> package.</p>
+        <div class="code-block">
+<span class="kw">import</span> java.util.Scanner;   <span class="cm">// 1. Import Scanner</span>
+
+Scanner sc = <span class="kw">new</span> Scanner(System.in);  <span class="cm">// 2. Create Scanner object</span>
+
+System.out.print(<span class="str">"Enter your name: "</span>);
+String name = sc.nextLine();   <span class="cm">// reads a full line</span>
+
+System.out.print(<span class="str">"Enter age: "</span>);
+<span class="kw">int</span> age = sc.nextInt();        <span class="cm">// reads an integer</span>
+
+System.out.println(<span class="str">"Hello, "</span> + name + <span class="str">". Age: "</span> + age);
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== MODULE 3 ===== -->
+  <section class="module" id="mod3">
+    <div class="module-header">
+      <div class="module-num">3</div>
+      <h2>Control Flow Statements</h2>
+    </div>
+    <div class="module-body">
+
+      <div class="subtopic">
+        <h3>Overview of Control Statements</h3>
+        <p>Control statements allow the flow of execution to be controlled within a program. Java has three types:</p>
+        <ul class="notes">
+          <li><span class="key">Decision-Making Statements</span> — if, if-else, else-if ladder, switch</li>
+          <li><span class="key">Looping (Iteration) Statements</span> — while, do-while, for, enhanced for</li>
+          <li><span class="key">Branching Statements</span> — break, continue, return</li>
+        </ul>
+      </div>
+
+      <div class="subtopic">
+        <h3>Decision-Making: if / else-if / else</h3>
+        <div class="code-block">
+<span class="cm">// Simple if</span>
+<span class="kw">if</span> (age >= <span class="num">18</span>) {
+  System.out.println(<span class="str">"Adult"</span>);
+}
+
+<span class="cm">// else-if ladder</span>
+<span class="kw">if</span> (marks >= <span class="num">90</span>) {
+  System.out.println(<span class="str">"Grade: A+"</span>);
+} <span class="kw">else if</span> (marks >= <span class="num">80</span>) {
+  System.out.println(<span class="str">"Grade: A"</span>);
+} <span class="kw">else</span> {
+  System.out.println(<span class="str">"Grade: B"</span>);
+}
+        </div>
+        <div class="info-box blue">
+          <strong>Key Rule</strong>
+          The <em>first</em> condition that evaluates to true is executed; all others are skipped.
+        </div>
+      </div>
+
+      <div class="subtopic">
+        <h3>Decision-Making: switch Statement</h3>
+        <p>A <span class="key">multi-way branch</span> — selects a block of code based on the value of an expression.</p>
+        <div class="code-block">
+<span class="kw">switch</span> (day) {
+  <span class="kw">case</span> <span class="num">1</span>:
+    System.out.println(<span class="str">"Monday"</span>);
+    <span class="kw">break</span>;
+  <span class="kw">case</span> <span class="num">2</span>:
+    System.out.println(<span class="str">"Tuesday"</span>);
+    <span class="kw">break</span>;
+  <span class="kw">default</span>:
+    System.out.println(<span class="str">"Invalid day"</span>);
+}
+        </div>
+        <div class="info-box yellow">
+          <strong>Important</strong>
+          Always include <code>break</code> after each case to prevent "fall-through" (executing the next case unintentionally).
+        </div>
+      </div>
+
+      <div class="subtopic">
+        <h3>Looping: while Loop</h3>
+        <p>Executes a block of code <span class="key">as long as the condition is true</span>.</p>
+        <div class="code-block">
+<span class="kw">int</span> i = <span class="num">1</span>;
+<span class="kw">while</span> (i <= <span class="num">5</span>) {
+  System.out.println(<span class="str">"Count: "</span> + i);
+  i++;
+}
+        </div>
+      </div>
+
+      <div class="subtopic">
+        <h3>Looping: do-while Loop</h3>
+        <p>Like while, but <span class="key">guarantees the block runs at least once</span> — condition is checked <em>after</em> execution.</p>
+        <div class="code-block">
+<span class="kw">int</span> i = <span class="num">1</span>;
+<span class="kw">do</span> {
+  System.out.println(<span class="str">"Count: "</span> + i);
+  i++;
+} <span class="kw">while</span> (i <= <span class="num">5</span>);
+        </div>
+      </div>
+
+      <div class="subtopic">
+        <h3>Looping: for Loop</h3>
+        <p>Used when you <span class="key">know exactly how many times</span> to repeat.</p>
+        <div class="code-block">
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i <= <span class="num">5</span>; i++) {
+  System.out.println(<span class="str">"Count: "</span> + i);
+}
+        </div>
+        <p style="margin-top:0.7rem"><span class="key">Enhanced for Loop (for-each)</span> — iterates over arrays or collections:</p>
+        <div class="code-block">
+<span class="kw">int</span>[] numbers = {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>};
+<span class="kw">for</span> (<span class="kw">int</span> number : numbers) {
+  System.out.println(number);
+}
+        </div>
+      </div>
+
+      <div class="subtopic">
+        <h3>Branching Statements</h3>
+        <table>
+          <tr><th>Statement</th><th>Purpose</th></tr>
+          <tr><td><code>break</code></td><td>Exits from a loop or switch statement immediately</td></tr>
+          <tr><td><code>continue</code></td><td>Skips the current loop iteration and proceeds to the next</td></tr>
+          <tr><td><code>return</code></td><td>Exits from the current method; optionally returns a value</td></tr>
+        </table>
+        <div class="code-block">
+<span class="cm">// break example</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i <= <span class="num">5</span>; i++) {
+  <span class="kw">if</span> (i == <span class="num">3</span>) <span class="kw">break</span>;   <span class="cm">// exits when i = 3</span>
+  System.out.println(i);
+}
+
+<span class="cm">// continue example</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i <= <span class="num">5</span>; i++) {
+  <span class="kw">if</span> (i == <span class="num">3</span>) <span class="kw">continue</span>; <span class="cm">// skips i = 3</span>
+  System.out.println(i);
+}
+        </div>
+      </div>
+
+      <div class="subtopic">
+        <h3>Loop Comparison</h3>
+        <table>
+          <tr><th>Loop</th><th>When to Use</th><th>Condition Checked</th></tr>
+          <tr><td>while</td><td>Unknown number of iterations</td><td>Before execution</td></tr>
+          <tr><td>do-while</td><td>Need at least 1 execution</td><td>After execution</td></tr>
+          <tr><td>for</td><td>Known number of iterations</td><td>Before execution</td></tr>
+          <tr><td>for-each</td><td>Iterating arrays/collections</td><td>Automatic</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== MODULE 4 ===== -->
+  <section class="module" id="mod4">
+    <div class="module-header">
+      <div class="module-num">4</div>
+      <h2>Arrays</h2>
+    </div>
+    <div class="module-body">
+
+      <div class="subtopic">
+        <h3>What is an Array?</h3>
+        <p>An array is a <span class="key">data structure</span> that stores multiple values of the <span class="key">same type</span> in a single variable.</p>
+        <div class="quick-facts">
+          <div class="fact-card"><div class="fact-label">Size</div><div class="fact-value">Fixed</div></div>
+          <div class="fact-card"><div class="fact-label">Element Types</div><div class="fact-value">Same Type</div></div>
+          <div class="fact-card"><div class="fact-label">First Index</div><div class="fact-value">0</div></div>
+        </div>
+        <ul class="notes">
+          <li><span class="key">Fixed size:</span> Once declared, size cannot be changed.</li>
+          <li><span class="key">Same type:</span> All elements must be the same data type.</li>
+          <li><span class="key">Indexed access:</span> Elements accessed using an index, starting at <strong>0</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="subtopic">
+        <h3>1. One-Dimensional Array</h3>
+        <p>A simple <span class="key">list of elements</span> organized in a single row. Accessed using a single index.</p>
+        <div class="code-block">
+<span class="cm">// Declaration and initialization</span>
+<span class="kw">int</span>[] scores = {<span class="num">85</span>, <span class="num">90</span>, <span class="num">78</span>, <span class="num">92</span>, <span class="num">88</span>};
+
+<span class="cm">// Accessing elements</span>
+System.out.println(scores[<span class="num">0</span>]);  <span class="cm">// prints 85</span>
+System.out.println(scores[<span class="num">4</span>]);  <span class="cm">// prints 88</span>
+
+<span class="cm">// Iterating with for-each</span>
+<span class="kw">for</span> (<span class="kw">int</span> s : scores) {
+  System.out.println(s);
+}
+        </div>
+        <p>Ideal for: linear data like scores, prices, or names.</p>
+      </div>
+
+      <div class="subtopic">
+        <h3>2. Two-Dimensional Array</h3>
+        <p>Like a <span class="key">grid or table</span> — rows and columns. Each element is identified by <span class="key">two indices: [row][column]</span>.</p>
+        <div class="code-block">
+<span class="cm">// Declaration</span>
+<span class="kw">int</span>[][] matrix = <span class="kw">new</span> <span class="kw">int</span>[<span class="num">3</span>][<span class="num">3</span>];
+
+<span class="cm">// Access element at row 1, column 2</span>
+matrix[<span class="num">1</span>][<span class="num">2</span>] = <span class="num">5</span>;
+
+<span class="cm">// Iterating with nested for loops</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">3</span>; i++) {
+  <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; <span class="num">3</span>; j++) {
+    System.out.print(matrix[i][j] + <span class="str">" "</span>);
+  }
+  System.out.println();
+}
+        </div>
+        <p>Useful for: grids, matrices, board games (e.g., chess), multiplication tables.</p>
+      </div>
+
+      <div class="subtopic">
+        <h3>1D vs 2D Array Comparison</h3>
+        <table>
+          <tr><th>Feature</th><th>1D Array</th><th>2D Array</th></tr>
+          <tr><td>Structure</td><td>Single row (list)</td><td>Rows and columns (table)</td></tr>
+          <tr><td>Indices needed</td><td>1</td><td>2</td></tr>
+          <tr><td>Access syntax</td><td>arr[i]</td><td>arr[i][j]</td></tr>
+          <tr><td>Use case</td><td>Scores, names, prices</td><td>Matrices, grids, tables</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== MODULE 5 ===== -->
+  <section class="module" id="mod5">
+    <div class="module-header">
+      <div class="module-num">5</div>
+      <h2>Introduction to Classes, Methods & Exception Handling</h2>
+    </div>
+    <div class="module-body">
+
+      <div class="subtopic">
+        <h3>Classes and Objects</h3>
+        <ul class="notes">
+          <li><span class="key">Class</span> — a blueprint or template that defines the structure and behavior of objects. Contains <em>attributes (fields)</em> and <em>methods</em>.</li>
+          <li><span class="key">Object</span> — an actual instance of a class. Created using the <code>new</code> keyword.</li>
+          <li><span class="key">Method</span> — a block of code within a class that performs a specific task (like a function in other languages).</li>
+        </ul>
+        <div class="info-box blue">
+          <strong>Analogy</strong>
+          A "Car" class is a blueprint. A specific car like "Honda Civic" is an <em>object</em> (instance) of that class.
+        </div>
+        <div class="code-block">
+<span class="cm">// Defining a class</span>
+<span class="kw">public class</span> Car {
+  String color;    <span class="cm">// attribute</span>
+  String model;
+
+  <span class="kw">void</span> drive() {  <span class="cm">// method</span>
+    System.out.println(<span class="str">"Driving..."</span>);
+  }
+}
+
+<span class="cm">// Creating an object</span>
+Car myCar = <span class="kw">new</span> Car();
+myCar.color = <span class="str">"Red"</span>;
+myCar.drive();
+        </div>
+      </div>
+
+      <div class="subtopic">
+        <h3>Types of Methods</h3>
+        <table>
+          <tr><th>Type</th><th>Description</th><th>Key Keyword</th></tr>
+          <tr><td>Instance Method</td><td>Belongs to an object; called using object reference</td><td>(none)</td></tr>
+          <tr><td>Static Method</td><td>Belongs to the class; called without creating an object</td><td><code>static</code></td></tr>
+        </table>
+        <p style="margin-top: 0.7rem"><span class="key">Method Structure:</span></p>
+        <ul class="notes">
+          <li><span class="key">Modifiers:</span> public, private, static, etc.</li>
+          <li><span class="key">Return Type:</span> void, int, String, etc.</li>
+          <li><span class="key">Method Name:</span> Follows camelCase naming convention.</li>
+          <li><span class="key">Parameters:</span> Optional values the method accepts.</li>
+        </ul>
+        <div class="code-block">
+<span class="kw">public static int</span> add(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+  <span class="kw">return</span> a + b;
+}
+
+<span class="cm">// Calling a static method</span>
+System.out.println(add(<span class="num">5</span>, <span class="num">10</span>));  <span class="cm">// Output: 15</span>
+        </div>
+      </div>
+
+      <div class="subtopic">
+        <h3>Debugging</h3>
+        <p>Debugging is the process of <span class="key">identifying and resolving issues (bugs)</span> in the code.</p>
+        <p><strong>Steps for Debugging:</strong></p>
+        <ul class="notes">
+          <li><strong>Understand the Problem</strong> — reproduce the bug consistently and understand expected vs actual behavior.</li>
+          <li><strong>Use Debugging Tools</strong> — IDEs like IntelliJ IDEA, Eclipse, and NetBeans have built-in debuggers.</li>
+        </ul>
+        <p><strong>Common Debugging Techniques:</strong></p>
+        <ul class="notes">
+          <li><span class="key">Print Statements</span> — Insert <code>System.out.println()</code> to print variable values or track execution flow.</li>
+          <li><span class="key">Breakpoints</span> — Pause execution at a specific line in an IDE to inspect the program state.</li>
+          <li><span class="key">Step Through Code</span> — After setting breakpoints, step line by line to observe behavior.</li>
+        </ul>
+      </div>
+
+      <div class="subtopic">
+        <h3>Exception Handling</h3>
+        <p>An <span class="key">exception</span> is an event that disrupts the normal flow of a program. In Java, exceptions are <em>objects</em> that represent errors.</p>
+        <p>Java uses <span class="key">try, catch, and finally</span> blocks:</p>
+        <ul class="notes">
+          <li><span class="key">try block</span> — contains code that might throw an exception.</li>
+          <li><span class="key">catch block</span> — handles the exception. Multiple catch blocks can handle different exception types.</li>
+          <li><span class="key">finally block</span> — always executes, regardless of whether an exception occurred. Used to release resources.</li>
+        </ul>
+        <div class="code-block">
+<span class="kw">try</span> {
+  <span class="kw">int</span> result = <span class="num">10</span> / <span class="num">0</span>;   <span class="cm">// may throw exception</span>
+} <span class="kw">catch</span> (ArithmeticException e) {
+  System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+} <span class="kw">finally</span> {
+  System.out.println(<span class="str">"This always runs."</span>);
+}
+        </div>
+      </div>
+
+      <div class="subtopic">
+        <h3>throw and throws Keywords</h3>
+        <ul class="notes">
+          <li><span class="key">throw</span> — used to <em>manually</em> throw an exception.</li>
+          <li><span class="key">throws</span> — used in method signatures to <em>declare</em> what exceptions a method might throw.</li>
+        </ul>
+        <div class="code-block">
+<span class="cm">// throw example</span>
+<span class="kw">if</span> (age &lt; <span class="num">0</span>) {
+  <span class="kw">throw new</span> IllegalArgumentException(<span class="str">"Age cannot be negative"</span>);
+}
+
+<span class="cm">// throws example</span>
+<span class="kw">public void</span> readFile() <span class="kw">throws</span> IOException {
+  <span class="cm">// file reading code</span>
+}
+        </div>
+      </div>
+
+      <div class="subtopic">
+        <h3>Types of Exceptions</h3>
+        <table>
+          <tr><th>Type</th><th>Checked At</th><th>Examples</th></tr>
+          <tr><td><span class="key">Checked Exceptions</span></td><td>Compile time — must handle with try-catch or throws</td><td>IOException, SQLException, FileNotFoundException</td></tr>
+          <tr><td><span class="key">Unchecked Exceptions</span> (Runtime)</td><td>Runtime — result from programming errors</td><td>NullPointerException, ArrayIndexOutOfBoundsException, ArithmeticException</td></tr>
+        </table>
+      </div>
+
+      <div class="subtopic">
+        <h3>Best Practices for Exception Handling</h3>
+        <ul class="notes">
+          <li>Catch <span class="key">specific exceptions</span> — avoid using generic <code>Exception</code> class.</li>
+          <li>Use <span class="key">meaningful error messages</span> when throwing exceptions.</li>
+          <li>Avoid overusing exceptions — use them only for exceptional conditions, not for control flow.</li>
+          <li>Release resources in a <code>finally</code> block or use <span class="key">try-with-resources</span>.</li>
+          <li>Use <span class="key">logging frameworks</span> (like Log4j) instead of printing stack traces.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== MODULE 6 ===== -->
+  <section class="module" id="mod6">
+    <div class="module-header">
+      <div class="module-num">6</div>
+      <h2>File Handling & I/O Operations</h2>
+    </div>
+    <div class="module-body">
+
+      <div class="subtopic">
+        <h3>Introduction to File Handling</h3>
+        <p>File handling in Java allows programs to <span class="key">create, read, write, and manipulate files</span> stored on the file system.</p>
+        <ul class="notes">
+          <li>Java provides the <span class="key">java.io</span> and <span class="key">java.nio</span> packages for file handling.</li>
+          <li>Files are used to store data persistently — configuration files, logs, user data, etc.</li>
+        </ul>
+      </div>
+
+      <div class="subtopic">
+        <h3>Key Classes for File Handling</h3>
+        <table>
+          <tr><th>Class</th><th>Package</th><th>Purpose</th></tr>
+          <tr><td><code>File</code></td><td>java.io</td><td>Manages file/directory names; check existence, create, delete. Does NOT read/write data.</td></tr>
+          <tr><td><code>FileReader</code></td><td>java.io</td><td>Reads character data from files</td></tr>
+          <tr><td><code>BufferedReader</code></td><td>java.io</td><td>Reads characters efficiently via buffering; reads line by line</td></tr>
+          <tr><td><code>FileWriter</code></td><td>java.io</td><td>Writes character data to files</td></tr>
+          <tr><td><code>BufferedWriter</code></td><td>java.io</td><td>Writes characters efficiently via buffering</td></tr>
+          <tr><td><code>PrintWriter</code></td><td>java.io</td><td>Writes formatted text to files (like System.out for files)</td></tr>
+          <tr><td><code>Scanner</code></td><td>java.util</td><td>Reads and parses data from files</td></tr>
+          <tr><td><code>Files</code></td><td>java.nio.file</td><td>Static methods for file I/O; more efficient than java.io classes</td></tr>
+        </table>
+      </div>
+
+      <div class="subtopic">
+        <h3>Basic File Operations</h3>
+
+        <p><span class="key">Creating a File</span> — use <code>File</code> class and <code>createNewFile()</code> method. Returns <code>true</code> if created, <code>false</code> if already exists.</p>
+
+        <p><span class="key">Writing to a File</span> — use <code>FileWriter</code> or <code>BufferedWriter</code>:</p>
+        <div class="code-block">
+<span class="kw">try</span> (FileWriter writer = <span class="kw">new</span> FileWriter(<span class="str">"sample.txt"</span>)) {
+  writer.write(<span class="str">"Hello, File!"</span>);
+} <span class="kw">catch</span> (IOException e) {
+  System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}
+        </div>
+
+        <p><span class="key">Reading from a File</span> — use <code>FileReader</code> and <code>BufferedReader</code>:</p>
+        <div class="code-block">
+<span class="kw">try</span> (BufferedReader reader = <span class="kw">new</span> BufferedReader(<span class="kw">new</span> FileReader(<span class="str">"sample.txt"</span>))) {
+  String line;
+  <span class="kw">while</span> ((line = reader.readLine()) != <span class="kw">null</span>) {
+    System.out.println(line);
+  }
+} <span class="kw">catch</span> (IOException e) {
+  System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}
+        </div>
+
+        <p><span class="key">Appending to a File</span> — pass <code>true</code> as the second parameter to <code>FileWriter</code>:</p>
+        <div class="code-block">
+FileWriter writer = <span class="kw">new</span> FileWriter(<span class="str">"sample.txt"</span>, <span class="kw">true</span>);
+<span class="cm">// true = append mode; does NOT overwrite existing content</span>
+        </div>
+
+        <p><span class="key">Deleting a File</span> — use the <code>delete()</code> method from the <code>File</code> class.</p>
+      </div>
+
+      <div class="subtopic">
+        <h3>Common Exceptions in File Handling</h3>
+        <table>
+          <tr><th>Exception</th><th>When It Occurs</th></tr>
+          <tr><td><code>FileNotFoundException</code></td><td>File does not exist or is inaccessible. Subclass of IOException.</td></tr>
+          <tr><td><code>IOException</code></td><td>General failure during I/O operations (reading from closed stream, write failure, etc.)</td></tr>
+          <tr><td><code>SecurityException</code></td><td>Security manager denies access (no read/write permission)</td></tr>
+        </table>
+
+        <p style="margin-top: 0.7rem"><span class="key">Common Scenarios:</span></p>
+        <ul class="notes">
+          <li>Missing file → catch <code>FileNotFoundException</code></li>
+          <li>Permission issues → catch <code>SecurityException</code> or <code>IOException</code></li>
+          <li>I/O interruption during operations → catch <code>IOException</code></li>
+        </ul>
+      </div>
+
+      <div class="subtopic">
+        <h3>Best Practices for File Handling</h3>
+        <ul class="notes">
+          <li><span class="key">Use specific exceptions</span> — catch <code>FileNotFoundException</code> or <code>IOException</code> instead of a general <code>Exception</code>.</li>
+          <li><span class="key">Use try-with-resources</span> — automatically closes resources after the try block; prevents resource leaks.</li>
+          <li><span class="key">Provide meaningful messages</span> — include informative error messages or logging when catching exceptions.</li>
+          <li><span class="key">Always close resources</span> — close file readers/writers to avoid memory leaks or file locks.</li>
+          <li><span class="key">Use logging</span> — for production systems, log exceptions instead of printing stack traces.</li>
+          <li><span class="key">Graceful error handling</span> — avoid abrupt program termination; provide fallback mechanisms (e.g., ask user for another file path).</li>
+        </ul>
+        <div class="info-box green">
+          <strong>Try-with-Resources (Best Practice)</strong>
+          When you open a resource (like a FileWriter) inside <code>try(...)</code>, Java automatically closes it when the block ends — no need for a <code>finally</code> block.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  📘 CCPRGG2L – Intermediate Programming &nbsp;|&nbsp; Reviewer based on course manual content only &nbsp;|&nbsp; Good luck on your test! 🍀
+</footer>
+
+</body>
+</html>
